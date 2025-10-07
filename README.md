@@ -2,10 +2,11 @@
 
 A collection of lightweight, web-based developer utilities with a clean GitHub-style interface.
 
-Currently includes:
+Currently, includes:
 
 1. **URL Shortener** — Shortens long URLs using the TinyURL API.
 2. **Base64 Encoder/Decoder** — Encode and decode text to/from Base64.
+3. **QR Code Generator** — Generate a QR code for your links.
 
 Designed to be modular — new tools can be easily added.
 
