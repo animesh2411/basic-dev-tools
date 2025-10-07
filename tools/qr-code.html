@@ -23,7 +23,8 @@
         </div>
 
         <div id="qrcodeContainer">
-            <div id="qrcode"></div>
+            <canvas id="qrcodeCanvas"></canvas>
+            <div id="originalText" style="margin-top: 1rem; text-align:center;"></div>
         </div>
     </div>
 </main>
@@ -32,7 +33,6 @@
     <p>© 2025 Basic Dev Tools</p>
 </footer>
 
-<!-- Include QRCode.js library -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 <script src="js/qr-code.js"></script>
 </body>

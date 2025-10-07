@@ -125,9 +125,23 @@ textarea {
 #qrcodeContainer {
   margin-top: 2rem;
   display: flex;
-  justify-content: center;
-  width: 100%;
+  flex-direction: column;
+  align-items: center;
 }
+
+#qrcodeCanvas {
+  max-width: 90%;
+  height: auto;
+  border: 1px solid #d0d7de;
+}
+
+#originalText {
+  font-size: 1rem;
+  color: #24292e;
+  word-break: break-word;
+  max-width: 90%;
+}
+
 
 /* Responsive */
 @media (max-width: 500px) {
