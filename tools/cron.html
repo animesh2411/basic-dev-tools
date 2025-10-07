@@ -15,7 +15,10 @@
 <main class="tool-container">
     <div class="card">
         <input type="text" id="cronExp" placeholder="Enter cron expression (e.g., 0 9 * * 1-5)" />
-        <button id="readCronBtn">Read Cron</button>
+        <div class="btn-group">
+            <button id="readCronBtn">Read Cron</button>
+            <button id="clearBtn" class="secondary">Clear</button>
+        </div>
 
         <div id="cronResult" class="result-box" style="display:none;"></div>
     </div>

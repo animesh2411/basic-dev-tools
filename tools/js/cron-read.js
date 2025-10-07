@@ -17,3 +17,8 @@ document.getElementById("readCronBtn").addEventListener("click", async () => {
     output.innerHTML = "❌ Invalid cron expression! Please try again.";
   }
 });
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  document.getElementById("cronExp").value = "";
+  document.getElementById("cronResult").style.display = "none";
+});

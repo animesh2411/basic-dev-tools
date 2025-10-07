@@ -22,3 +22,8 @@ document.getElementById("shortenBtn").addEventListener("click", async () => {
     output.innerHTML = "❌ Failed to shorten URL. Please try again.";
   }
 });
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  document.getElementById("longUrl").value = "";
+  document.getElementById("shortResult").style.display = "none";
+});
