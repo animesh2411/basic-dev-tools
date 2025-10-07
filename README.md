@@ -7,6 +7,7 @@ Currently, includes:
 1. **URL Shortener** — Shortens long URLs using the TinyURL API.
 2. **Base64 Encoder/Decoder** — Encode and decode text to/from Base64.
 3. **QR Code Generator** — Generate a QR code for your links.
+4. **Cron Expression Reader** — Read and edit cron schedule expressions.
 
 Designed to be modular — new tools can be easily added.
 
