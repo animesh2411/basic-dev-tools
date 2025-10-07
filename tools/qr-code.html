@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Generator - Basic Dev Tools</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header>
+    <h1>📱 QR Code Generator</h1>
+    <a href="../index.html" class="back-link">← Back to Tools</a>
+</header>
+
+<main class="tool-container">
+    <div class="card qr-card">
+        <input type="text" id="qrText" placeholder="Enter URL or text..." />
+
+        <div class="btn-group">
+            <button id="generateBtn">Generate QR Code</button>
+            <button id="downloadBtn" class="secondary" disabled>Download</button>
+            <button id="clearBtn" class="secondary">Clear</button>
+        </div>
+
+        <div id="qrcodeContainer">
+            <div id="qrcode"></div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>© 2025 Basic Dev Tools</p>
+</footer>
+
+<!-- Include QRCode.js library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script src="js/qr-code.js"></script>
+</body>
+</html>

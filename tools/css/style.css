@@ -103,3 +103,43 @@ textarea {
 .secondary:hover {
   background-color: #5a616a;
 }
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#qrText {
+  width: 90%;
+  max-width: 400px;
+  margin-bottom: 1rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+#qrcodeContainer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  #qrText {
+    width: 100%;
+  }
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-group button {
+    width: 100%;
+  }
+}
+
