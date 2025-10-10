@@ -1,15 +1,12 @@
+Here’s an **updated version of your README** reflecting all the new tools you’ve added, including the QR code generator, Cron reader, and AI image generator, plus some small improvements for clarity and consistency:
+
+---
+
 # 🧰 Basic Dev Tools
 
-A collection of lightweight, web-based developer utilities with a clean GitHub-style interface.
+A collection of lightweight, web-based developer utilities with a **clean GitHub-style interface**.
 
-Currently, includes:
-
-1. **URL Shortener** — Shortens long URLs using the TinyURL API.
-2. **Base64 Encoder/Decoder** — Encode and decode text to/from Base64.
-3. **QR Code Generator** — Generate a QR code for your links.
-4. **Cron Expression Reader** — Read and edit cron schedule expressions.
-
-Designed to be modular — new tools can be easily added.
+Modular design — new tools can be easily added.
 
 ---
 
@@ -24,22 +21,29 @@ Designed to be modular — new tools can be easily added.
 ```
 basic-dev-tools/
 │
-├── index.html                # Homepage with tiles for all tools
+├── index.html                  # Homepage with tiles for all tools
 ├── css/
-│   └── main.css              # Homepage styling
+│   └── main.css                # Homepage styling
 ├── js/
-│   └── main.js               # Homepage JS (tile hover animations)
+│   └── main.js                 # Homepage JS (tile hover animations)
 │
 └── tools/
-    ├── url-shortener.html    # URL Shortener page
-    ├── base64-tool.html      # Base64 Encoder/Decoder page
+    ├── url-shortener.html      # URL Shortener page
+    ├── base64-tool.html        # Base64 Encoder/Decoder page
+    ├── qr-code.html            # QR Code Generator page
+    ├── cron-reader.html        # Cron Expression Reader page
+    ├── image-generator.html    # AI Image Generator page
     │
     ├── css/
-    │   └── style.css         # Shared tool page styling
+    │   └── style.css           # Shared tool page styling
+    │   └── image-generator.css # Styling for AI Image Generator
     │
     └── js/
-        ├── url-shortener.js  # JS for URL Shortener
-        └── base64-tool.js    # JS for Base64 tool
+        ├── url-shortener.js    # JS for URL Shortener
+        ├── base64-tool.js      # JS for Base64 tool
+        ├── qr-code.js          # JS for QR Code Generator
+        ├── cron-reader.js      # JS for Cron Expression Reader
+        └── image-generator.js  # JS for AI Image Generator
 ```
 
 ---
@@ -62,6 +66,23 @@ basic-dev-tools/
 * Input validation and error handling for invalid Base64.
 * Clear button to reset input/output.
 
+### QR Code Generator
+
+* Generate a QR code from any text or URL.
+* Dynamically wraps long URLs.
+* Download generated QR code as PNG.
+
+### Cron Expression Reader
+
+* Enter any cron expression and see human-readable description.
+* Validates expression and displays errors if invalid.
+
+### AI Image Generator
+
+* Generate images from text prompts using **Pollinations API** (no API key, no backend required).
+* Responsive canvas with prompt displayed at top and footer.
+* Download generated image as PNG.
+
 ---
 
 ## 🚀 Getting Started
@@ -80,7 +101,10 @@ Open `index.html` in your browser, or host on GitHub Pages.
 
 * Click a tile to open the tool page.
 * URL Shortener: paste a long URL → get a TinyURL link.
-* Base64 tool: paste text → encode/decode.
+* Base64 tool: encode/decode text.
+* QR Code generator: enter URL/text → generate & download QR.
+* Cron Reader: enter cron expression → read schedule.
+* AI Image Generator: enter prompt → generate & download image.
 
 ---
 
@@ -105,6 +129,7 @@ Open `index.html` in your browser, or host on GitHub Pages.
 
 * Pure HTML, CSS, and JavaScript.
 * No backend required except for URL Shortener (TinyURL API).
+* Pollinations API is used for AI Image Generator (no key required, CORS-enabled).
 
 ---
 
@@ -114,11 +139,13 @@ Open `index.html` in your browser, or host on GitHub Pages.
 * Analytics for URL shortener (requires API key).
 * Dark mode toggle.
 * Option to choose multiple shortener APIs (TinyURL, is.gd, Bitly).
+* Loading animation for AI Image Generator to prevent rapid spamming.
 
 ---
 
 ## 📜 License
 
-MIT License © 2025 Animesh Gupta
+MIT License © © 2025 Basic Dev Tools
+Made with ❤️ by Animesh
 
 ---
