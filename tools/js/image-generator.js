@@ -60,7 +60,7 @@ generateBtn.addEventListener("click", async () => {
   ctx.fillStyle = "#f6f8fa";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  originalTextDiv.innerText = prompt;
+//  originalTextDiv.innerText = prompt;
   ctx.textAlign = "center";
   ctx.fillStyle = "#24292e";
 
@@ -76,25 +76,21 @@ generateBtn.addEventListener("click", async () => {
   ctx.fillText("Generating image...", canvas.width / 2, topMargin + textHeight + spacingBelowText);
 
   try {
-    const response = await fetch("https://api.craiyon.com/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-
-    if (!response.ok) throw new Error("Failed to generate image");
-
-    const data = await response.json();
-    const firstImage = data.images[0];
-    const imageUrl = `data:image/png;base64,${firstImage}`;
+    // ✅ Using Pollinations API (no token, no backend, CORS-safe)
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
 
     const img = new Image();
+    img.crossOrigin = "anonymous"; // allow drawing to canvas
     img.src = imageUrl;
     img.onload = () => {
+      ctx.fillStyle = "#f6f8fa";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       const imgX = (canvas.width - imageSize) / 2;
       const imgY = topMargin + textHeight + spacingBelowText;
       ctx.drawImage(img, imgX, imgY, imageSize, imageSize);
 
+      ctx.fillStyle = "#24292e";
       ctx.font = "32px Inter, sans-serif";
       ctx.fillText("Made with ❤️ by Animesh & © 2025 Basic Dev Tools", canvas.width / 2, canvas.height - 60);
     };
@@ -109,13 +105,13 @@ generateBtn.addEventListener("click", async () => {
 
   } catch (err) {
     console.error(err);
-    ctx.fillText("❌ Error generating image. Please try again.", canvas.width/2, topMargin + textHeight + spacingBelowText);
+    ctx.fillText("❌ Error generating image. Please try again.", canvas.width / 2, topMargin + textHeight + spacingBelowText);
   }
 });
 
 clearBtn.addEventListener("click", () => {
   promptInput.value = "";
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  originalTextDiv.innerText = "";
+//  originalTextDiv.innerText = "";
   downloadBtn.disabled = true;
 });
