@@ -1,7 +1,3 @@
-Here’s an **updated version of your README** reflecting all the new tools you’ve added, including the QR code generator, Cron reader, and AI image generator, plus some small improvements for clarity and consistency:
-
----
-
 # 🧰 Basic Dev Tools
 
 A collection of lightweight, web-based developer utilities with a **clean GitHub-style interface**.
