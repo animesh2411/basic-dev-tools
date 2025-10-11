@@ -14,15 +14,16 @@ Modular design — new tools can be easily added.
 
 ## ⚙️ Tools Overview
 
-| Tool                       | Icon | Description                                      | Notes                                                                  |
-| -------------------------- | ---- | ------------------------------------------------ | ---------------------------------------------------------------------- |
-| URL Shortener              | 🔗   | Shorten long links using TinyURL API             | Real, shareable short links; input validation                          |
-| Base64 Encoder/Decoder     | 🧮   | Encode/decode text locally                       | Handles invalid Base64 gracefully; clear button                        |
-| QR Code Generator          | 📱   | Encode URLs or text into QR codes instantly      | Download generated QR as PNG                                           |
-| Cron Expression Reader     | ⏱️   | Read and edit cron schedule expressions          | Human-readable output; error validation                                |
-| AI Image Generator         | 🖼️  | Generate images from text prompts                | Uses Pollinations API; responsive canvas; download PNG                 |
-| Favicon / OG Image Fetcher | 🌐   | Fetch favicon, OG image, and page title from URL | Fully client-side; preview website metadata                            |
-| Text Diff Tool             | 🔍   | Compare two text blocks → highlight differences  | Side-by-side input and output; inline char-level diff; mobile-friendly |
+| Tool                       | Icon | Description                                       | Notes                                                                  |
+| -------------------------- | ---- | ------------------------------------------------- | ---------------------------------------------------------------------- |
+| URL Shortener              | 🔗   | Shorten long links using TinyURL API              | Real, shareable short links; input validation                          |
+| Base64 Encoder/Decoder     | 🧮   | Encode/decode text locally                        | Handles invalid Base64 gracefully; clear button                        |
+| QR Code Generator          | 📱   | Encode URLs or text into QR codes instantly       | Download generated QR as PNG                                           |
+| Cron Expression Reader     | ⏱️   | Read and edit cron schedule expressions           | Human-readable output; error validation                                |
+| AI Image Generator         | 🖼️  | Generate images from text prompts                 | Uses Pollinations API; responsive canvas; download PNG                 |
+| Favicon / OG Image Fetcher | 🌐   | Fetch favicon, OG image, and page title from URL  | Fully client-side; preview website metadata                            |
+| Text Diff Tool             | 🔍   | Compare two text blocks → highlight differences   | Side-by-side input and output; inline char-level diff; mobile-friendly |
+| Image Resizer              | 📏   | Resize images by width/height or target file size | Fully client-side; preview & download; supports MB/px input            |
 
 ---
 
@@ -42,6 +43,7 @@ Visit the live demo link above or host on GitHub Pages.
 * AI Image Generator: enter prompt → generate & download image.
 * Favicon / OG Image Fetcher: enter website URL → fetch favicon, OG image, title.
 * Text Diff Tool: paste original and modified text → highlight differences side-by-side.
+* Image Resizer: upload an image → resize by width/height **OR** target size in MB → preview & download resized image.
 
 ---
 
@@ -77,6 +79,7 @@ Visit the live demo link above or host on GitHub Pages.
 * Option to choose multiple shortener APIs (TinyURL, is.gd, Bitly).
 * Loading animation for AI Image Generator to prevent rapid spamming.
 * Optimized diff algorithm for Text Diff Tool for very large texts.
+* Image Resizer: add drag & drop upload, multiple format support, and faster compression.
 
 ---
 
