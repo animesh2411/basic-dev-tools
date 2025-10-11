@@ -7,6 +7,7 @@ const clearBtn = document.getElementById("clearBtn");
 const statusDiv = document.getElementById("status");
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d");
+const downloadBtn = document.getElementById("downloadBtn");
 
 let uploadedImage = null;
 let resizedBlob = null;
@@ -20,9 +21,11 @@ imageInput.addEventListener("change", (e) => {
         uploadedImage = img;
         canvas.width = img.width;
         canvas.height = img.height;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
         statusDiv.innerText = `Image loaded: ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)`;
         resizeBtn.disabled = false;
+        downloadBtn.disabled = true;
     };
     img.src = URL.createObjectURL(file);
 });
@@ -42,7 +45,7 @@ resizeBtn.addEventListener("click", async () => {
     const sizeVal = sizeInput.value ? parseFloat(sizeInput.value) : null;
 
     if ((widthVal || heightVal) && sizeVal) {
-        alert("Please either enter Width/Height **OR** Target Size (MB), not both.");
+        alert("Please either enter Width/Height OR Target Size (MB), not both.");
         statusDiv.innerText = "";
         resizeBtn.disabled = false;
         clearBtn.disabled = false;
@@ -50,43 +53,30 @@ resizeBtn.addEventListener("click", async () => {
     }
 
     try {
-        if (sizeVal) {
-            // Resize by target MB
-            resizedBlob = await compressImage(uploadedImage, uploadedImage.width, uploadedImage.height, sizeVal);
-        } else {
-            // Resize by dimensions
-            let targetWidth = widthVal || uploadedImage.width;
-            let targetHeight = heightVal || uploadedImage.height;
+        let targetWidth = uploadedImage.width;
+        let targetHeight = uploadedImage.height;
 
-            // Maintain aspect ratio if only one dimension provided
-            if (widthVal && !heightVal) {
-                targetHeight = Math.round((targetWidth / uploadedImage.width) * uploadedImage.height);
-            } else if (!widthVal && heightVal) {
-                targetWidth = Math.round((targetHeight / uploadedImage.height) * uploadedImage.width);
-            }
-
-            resizedBlob = await compressImage(uploadedImage, targetWidth, targetHeight, null);
+        if (widthVal || heightVal) {
+            targetWidth = widthVal || Math.round((heightVal / uploadedImage.height) * uploadedImage.width);
+            targetHeight = heightVal || Math.round((widthVal / uploadedImage.width) * uploadedImage.height);
         }
 
-        const url = URL.createObjectURL(resizedBlob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "resized.jpeg";
+        resizedBlob = await compressImage(uploadedImage, targetWidth, targetHeight, sizeVal);
 
-        // Show preview on canvas
+        // Show preview
+        const previewURL = URL.createObjectURL(resizedBlob);
         const imgPreview = new Image();
         imgPreview.onload = () => {
             canvas.width = imgPreview.width;
             canvas.height = imgPreview.height;
-            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(imgPreview, 0, 0);
+            URL.revokeObjectURL(previewURL);
         };
-        imgPreview.src = url;
+        imgPreview.src = previewURL;
 
-        // Activate download
-        statusDiv.innerHTML = `✅ Done! Resized image: ${(resizedBlob.size/1024/1024).toFixed(2)} MB
-        <button id="downloadBtn">Download</button>`;
-        document.getElementById("downloadBtn").onclick = () => link.click();
+        statusDiv.innerText = `✅ Done! Resized image: ${(resizedBlob.size/1024/1024).toFixed(2)} MB`;
+        downloadBtn.disabled = false;
 
     } catch (err) {
         console.error(err);
@@ -97,6 +87,16 @@ resizeBtn.addEventListener("click", async () => {
     clearBtn.disabled = false;
 });
 
+downloadBtn.addEventListener("click", () => {
+    if (!resizedBlob) return;
+    const url = URL.createObjectURL(resizedBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "resized.jpeg";
+    link.click();
+    URL.revokeObjectURL(url);
+});
+
 clearBtn.addEventListener("click", () => {
     imageInput.value = "";
     widthInput.value = "";
@@ -104,11 +104,13 @@ clearBtn.addEventListener("click", () => {
     sizeInput.value = "";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     statusDiv.innerText = "";
-    uploadedImage = null;
     resizedBlob = null;
+    uploadedImage = null;
+    resizeBtn.disabled = true;
+    downloadBtn.disabled = true;
 });
 
-
+// Converts canvas to proper JPEG Blob
 function compressImage(img, width, height, targetMB = null) {
     return new Promise((resolve, reject) => {
         const tempCanvas = document.createElement("canvas");
@@ -120,17 +122,29 @@ function compressImage(img, width, height, targetMB = null) {
         let quality = 0.95;
 
         function attempt() {
-            tempCanvas.toBlob((blob) => {
-                if (!blob) return reject("Failed to create image blob");
-
-                if (targetMB && blob.size / 1024 / 1024 > targetMB && quality > 0.05) {
-                    quality -= 0.05;
-                    attempt();
-                } else {
-                    resolve(blob);
-                }
-            }, "image/jpeg", quality);
+            const dataURL = tempCanvas.toDataURL("image/jpeg", quality);
+            const blob = dataURLtoBlob(dataURL);
+            if (targetMB && blob.size / 1024 / 1024 > targetMB && quality > 0.05) {
+                quality -= 0.05;
+                attempt();
+            } else {
+                resolve(blob);
+            }
         }
+
         attempt();
     });
+}
+
+// Helper to convert dataURL to Blob
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});
 }

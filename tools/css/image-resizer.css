@@ -110,3 +110,12 @@ canvas {
         width: 100%;
     }
 }
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: #f1f3f5;
+    color: #555;
+    margin-top: 2rem;
+    box-sizing: border-box;
+}
