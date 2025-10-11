@@ -35,18 +35,19 @@ header h1 {
 
 .card {
   background: #fff;
-  max-width: 1100px;
+  max-width: 960px;
   margin: 2rem auto;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
+/* Buttons */
 .btn-group {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  justify-content: flex-start;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
 }
 
 button {
@@ -71,91 +72,97 @@ button:hover {
   background-color: #5a616a;
 }
 
+/* Diff container for input textareas */
 .diff-container {
   display: flex;
-  justify-content: space-between;
   gap: 1rem;
-  flex-wrap: wrap;
+  margin-top: 1rem;
+  flex-wrap: wrap; /* stack on small screens */
 }
 
 .diff-column {
   flex: 1;
-  min-width: 320px;
   display: flex;
   flex-direction: column;
 }
 
-textarea {
+.diff-column h3 {
+  margin-bottom: 0.5rem;
+}
+
+.diff-column textarea {
   width: 100%;
-  height: 240px;
-  padding: 1rem;
+  min-height: 200px;
+  padding: 0.8rem;
   font-size: 1rem;
-  border: 1px solid #d0d7de;
   border-radius: 8px;
+  border: 1px solid #d0d7de;
   resize: vertical;
 }
 
+/* Diff result section */
 .diff-result {
-  margin-top: 2rem;
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  margin-top: 2rem;
 }
 
 .diff-side {
   flex: 1;
-  min-width: 320px;
-  background: #fff;
+  background: #f6f8fa;
   border: 1px solid #d0d7de;
   border-radius: 8px;
   padding: 1rem;
-  font-family: monospace;
   overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 600px;
 }
 
 .diff-line {
-  display: block;
-  padding: 0.2rem 0.5rem;
-}
-
-.diff-added {
-  background-color: #e6ffed;
-  color: #22863a;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 2px;
 }
 
 .diff-removed {
-  background-color: #ffeef0;
-  color: #b31d28;
+  background-color: #ffeef0; /* light red */
 }
 
-/* Responsive */
-@media (max-width: 700px) {
-  .diff-container,
-  .diff-result {
-    flex-direction: column;
-  }
-
-  .btn-group {
-    flex-direction: column;
-  }
-
-  .btn-group button {
-    width: 100%;
-  }
-
-  textarea {
-    height: 180px;
-  }
+.diff-added {
+  background-color: #e6ffed; /* light green */
 }
+
+.char-removed {
+  background-color: #fdd; /* inline removed chars */
+}
+
+.char-added {
+  background-color: #cfc; /* inline added chars */
+}
+
 footer {
-  text-align: center;      /* ensure all content inside is centered */
+  text-align: center;
   padding: 1rem;
   background: #f1f3f5;
   color: #555;
+  margin-top: 2rem;
 }
 
-footer p {
-  margin: 0.2rem 0;
+/* Responsive layout */
+@media (max-width: 768px) {
+  .diff-result,
+  .diff-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-group button {
+    width: 100%;
+  }
 }

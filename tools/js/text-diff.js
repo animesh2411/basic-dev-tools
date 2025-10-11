@@ -5,7 +5,7 @@ document.getElementById("compareBtn").addEventListener("click", () => {
   const leftBox = document.getElementById("diffLeft");
   const rightBox = document.getElementById("diffRight");
 
-  // Clear previous diff first
+  // Clear previous diff
   leftBox.innerHTML = "";
   rightBox.innerHTML = "";
 
@@ -15,7 +15,7 @@ document.getElementById("compareBtn").addEventListener("click", () => {
     return;
   }
 
-  const diff = generateSideDiff(original, modified);
+  const diff = generateFullDiff(original, modified);
   leftBox.innerHTML = diff.left;
   rightBox.innerHTML = diff.right;
 });
@@ -27,37 +27,48 @@ document.getElementById("clearBtn").addEventListener("click", () => {
   document.getElementById("diffRight").innerHTML = "";
 });
 
+// Full side-by-side diff with inline char-level highlighting
+function generateFullDiff(aLines, bLines) {
+  const leftHTML = [];
+  const rightHTML = [];
 
-function generateSideDiff(a, b) {
-  let i = 0, j = 0;
-  let leftHTML = "", rightHTML = "";
+  const maxLen = Math.max(aLines.length, bLines.length);
 
-  while (i < a.length || j < b.length) {
-    if (a[i] === b[j]) {
-      leftHTML += `<div class="diff-line">${a[i] || ""}</div>`;
-      rightHTML += `<div class="diff-line">${b[j] || ""}</div>`;
-      i++; j++;
+  for (let i = 0; i < maxLen; i++) {
+    const aLine = aLines[i] || "";
+    const bLine = bLines[i] || "";
+
+    if (aLine === bLine) {
+      leftHTML.push(`<div class="diff-line">${aLine}</div>`);
+      rightHTML.push(`<div class="diff-line">${bLine}</div>`);
     } else {
-      if (a[i] && !b.includes(a[i])) {
-        leftHTML += `<div class="diff-line diff-removed">- ${a[i]}</div>`;
-        rightHTML += `<div class="diff-line"></div>`;
-        i++;
-      } else if (b[j] && !a.includes(b[j])) {
-        leftHTML += `<div class="diff-line"></div>`;
-        rightHTML += `<div class="diff-line diff-added">+ ${b[j]}</div>`;
-        j++;
-      } else {
-        if (a[i]) {
-          leftHTML += `<div class="diff-line diff-removed">- ${a[i]}</div>`;
-          i++;
-        }
-        if (b[j]) {
-          rightHTML += `<div class="diff-line diff-added">+ ${b[j]}</div>`;
-          j++;
-        }
-      }
+      const { left: leftChars, right: rightChars } = inlineCharDiff(aLine, bLine);
+
+      leftHTML.push(`<div class="diff-line">${leftChars}</div>`);
+      rightHTML.push(`<div class="diff-line">${rightChars}</div>`);
     }
   }
 
-  return { left: leftHTML.trim(), right: rightHTML.trim() };
+  return { left: leftHTML.join(""), right: rightHTML.join("") };
+}
+
+function inlineCharDiff(a, b) {
+  const leftChars = [];
+  const rightChars = [];
+  const maxLen = Math.max(a.length, b.length);
+
+  for (let i = 0; i < maxLen; i++) {
+    const aChar = a[i] || "";
+    const bChar = b[i] || "";
+
+    if (aChar === bChar) {
+      leftChars.push(aChar);
+      rightChars.push(bChar);
+    } else {
+      if (aChar) leftChars.push(`<span class="char-removed">${aChar}</span>`);
+      if (bChar) rightChars.push(`<span class="char-added">${bChar}</span>`);
+    }
+  }
+
+  return { left: leftChars.join(""), right: rightChars.join("") };
 }
