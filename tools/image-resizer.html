@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Resizer - Basic Dev Tools</title>
+    <link rel="stylesheet" href="css/image-resizer.css">
+</head>
+<body>
+<header>
+    <h1>🖼️ Image Resizer</h1>
+    <a href="../index.html" class="back-link">← Back to Tools</a>
+</header>
+
+<div class="tool-container">
+    <div class="card">
+        <input type="file" id="imageInput" accept="image/*">
+
+        <div class="btn-group">
+            <input type="number" id="widthInput" placeholder="Width (px)">
+            <input type="number" id="heightInput" placeholder="Height (px)">
+            <input type="number" step="0.01" id="sizeInput" placeholder="Target Size (MB)">
+        </div>
+
+        <div class="btn-group">
+            <button id="resizeBtn" disabled>Resize</button>
+            <button id="clearBtn" class="secondary">Clear</button>
+        </div>
+
+        <canvas id="previewCanvas"></canvas>
+        <div id="status" class="result-box"></div>
+    </div>
+</div>
+
+<footer>
+    Made with ❤️ by <a href="https://github.com/animesh2411" target="_blank">Animesh</a> | © 2025 Basic Dev Tools
+</footer>
+
+<script src="js/image-resizer.js"></script>
+</body>
+</html>
