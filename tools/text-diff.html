@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Diff Tool - Basic Dev Tools</title>
+    <link rel="stylesheet" href="css/text-diff.css">
+</head>
+<body>
+<header>
+    <h1>🔍 Text Diff Tool</h1>
+    <a href="../index.html" class="back-link">← Back to Tools</a>
+</header>
+
+<div class="tool-container">
+    <div class="card">
+        <div class="btn-group">
+            <button id="compareBtn">Compare</button>
+            <button id="clearBtn" class="secondary">Clear</button>
+        </div>
+
+        <div class="diff-container">
+            <div class="diff-column">
+                <h3>Original Text</h3>
+                <textarea id="originalText" placeholder="Paste or type original text..."></textarea>
+            </div>
+
+            <div class="diff-column">
+                <h3>Modified Text</h3>
+                <textarea id="modifiedText" placeholder="Paste or type modified text..."></textarea>
+            </div>
+        </div>
+
+        <div id="diffResult" class="diff-result">
+            <div class="diff-side" id="diffLeft"></div>
+            <div class="diff-side" id="diffRight"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>Made with ❤️ by <a href="https://github.com/animesh2411" target="_blank"> Animesh</a> | Inspired by GitHub style
+    </p>
+    <p>© 2025 Basic Dev Tools</p>
+</footer>
+
+<script src="js/text-diff.js"></script>
+</body>
+</html>
