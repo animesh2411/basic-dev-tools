@@ -57,6 +57,7 @@ textarea {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
 button {
@@ -67,6 +68,7 @@ button {
   font-size: 1rem;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
@@ -83,13 +85,16 @@ button:hover {
 
 #aiCanvas {
   margin-top: 2rem;
-  max-width: 90%;
+  max-width: 100%;
+  height: auto;
   border: 1px solid #d0d7de;
+  border-radius: 8px;
 }
 
 .result-box {
   margin-top: 1rem;
   word-wrap: break-word;
+  color: #24292e;
 }
 
 footer {
@@ -97,4 +102,30 @@ footer {
   padding: 1rem;
   background: #f1f3f5;
   color: #555;
+}
+
+/* ✅ Responsive layout for mobile */
+@media (max-width: 600px) {
+  .card {
+    margin: 1.5rem 1rem;
+    padding: 1.5rem;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .btn-group button {
+    width: 100%;
+  }
+
+  #aiCanvas {
+    max-width: 100%;
+  }
 }
