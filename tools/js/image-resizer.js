@@ -71,7 +71,7 @@ resizeBtn.addEventListener("click", async () => {
         const url = URL.createObjectURL(resizedBlob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "resized.jpg";
+        link.download = "resized.jpeg";
 
         // Show preview on canvas
         const imgPreview = new Image();
