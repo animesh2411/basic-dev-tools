@@ -14,16 +14,17 @@ Modular design — new tools can be easily added.
 
 ## ⚙️ Tools Overview
 
-| Tool                       | Icon | Description                                       | Notes                                                                  |
-| -------------------------- | ---- | ------------------------------------------------- | ---------------------------------------------------------------------- |
-| URL Shortener              | 🔗   | Shorten long links using TinyURL API              | Real, shareable short links; input validation                          |
-| Base64 Encoder/Decoder     | 🧮   | Encode/decode text locally                        | Handles invalid Base64 gracefully; clear button                        |
-| QR Code Generator          | 📱   | Encode URLs or text into QR codes instantly       | Download generated QR as PNG                                           |
-| Cron Expression Reader     | ⏱️   | Read and edit cron schedule expressions           | Human-readable output; error validation                                |
-| AI Image Generator         | 🖼️  | Generate images from text prompts                 | Uses Pollinations API; responsive canvas; download PNG                 |
-| Favicon / OG Image Fetcher | 🌐   | Fetch favicon, OG image, and page title from URL  | Fully client-side; preview website metadata                            |
-| Text Diff Tool             | 🔍   | Compare two text blocks → highlight differences   | Side-by-side input and output; inline char-level diff; mobile-friendly |
-| Image Resizer              | 📏   | Resize images by width/height or target file size | Fully client-side; preview & download; supports MB/px input            |
+| Tool                       | Icon | Description                                       | Notes                                                                                                             |
+|----------------------------| ---- |---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| URL Shortener              | 🔗   | Shorten long links using TinyURL API              | Real, shareable short links; input validation                                                                     |
+| Polaroid Maker             | 📸   | Polaroid 4×6 Postcard Maker                       | Create printable 4×6 polaroid-style postcards — DPI control, fit modes, sharpening and captions. Exports JPG/PNG. |
+| Base64 Encoder/Decoder     | 🧮   | Encode/decode text locally                        | Handles invalid Base64 gracefully; clear button                                                                   |
+| QR Code Generator          | 📱   | Encode URLs or text into QR codes instantly       | Download generated QR as PNG                                                                                      |
+| Cron Expression Reader     | ⏱️   | Read and edit cron schedule expressions           | Human-readable output; error validation                                                                           |
+| AI Image Generator         | 🖼️  | Generate images from text prompts                 | Uses Pollinations API; responsive canvas; download PNG                                                            |
+| Favicon / OG Image Fetcher | 🌐   | Fetch favicon, OG image, and page title from URL  | Fully client-side; preview website metadata                                                                       |
+| Text Diff Tool             | 🔍   | Compare two text blocks → highlight differences   | Side-by-side input and output; inline char-level diff; mobile-friendly                                            |
+| Image Resizer              | 📏   | Resize images by width/height or target file size | Fully client-side; preview & download; supports MB/px input                                                       |
 
 ---
 
@@ -37,6 +38,7 @@ Visit the live demo link above or host on GitHub Pages.
 
 * Click a tile to open the tool page.
 * URL Shortener: paste a long URL → get a TinyURL link.
+* Polaroid Maker: upload an image → Generate & Exports JPG/PNG.
 * Base64 tool: encode/decode text.
 * QR Code generator: enter URL/text → generate & download QR.
 * Cron Reader: enter cron expression → read schedule.
