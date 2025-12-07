@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Polaroid-style 4×6 Postcard Maker</title>
+
+  <!-- External dependency for EXIF orientation -->
+  <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/postcard.css">
+</head>
+<body>
+<header>
+  <h1>Polaroid-style 4×6 Postcard Maker</h1>
+  <p class="muted">Upload a photo, place it in a polaroid-style 4×6 frame and export a printable JPG/PNG.</p>
+</header>
+
+<main>
+  <section class="app-shell">
+    <div class="controls">
+      <div class="control-block">
+        <label>Choose photo
+          <input id="file" type="file" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="control-row">
+        <label>DPI
+          <input id="dpi" type="number" min="72" max="1200" step="1" value="300" />
+        </label>
+
+        <label>Fit
+          <select id="fit">
+            <option value="cover">Cover (crop to fill)</option>
+            <option value="contain">Contain (fit inside)</option>
+          </select>
+        </label>
+
+        <label>Sharpness
+          <select id="sharpen">
+            <option value="none">None</option>
+            <option value="mild">Mild (good for upscales)</option>
+            <option value="strong">Strong</option>
+          </select>
+        </label>
+
+        <label>Caption (optional)
+          <input id="caption" type="text" placeholder="Type caption (appears on bottom white border)" />
+        </label>
+
+        <label>Format
+          <select id="format">
+            <option value="jpeg">JPEG</option>
+            <option value="png">PNG</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="control-actions">
+        <button id="generate" class="btn" disabled>Generate Polaroid 4×6</button>
+      </div>
+    </div>
+
+    <div id="previewBox" class="preview hidden">
+      <div class="preview-header">
+        <strong>Preview</strong>
+        <span class="small" id="infoText"></span>
+      </div>
+
+      <canvas id="canvas"></canvas>
+
+      <div class="preview-actions">
+        <a id="downloadLink" class="btn" download="postcard.jpg">Download</a>
+        <button id="openNewTab" class="btn dark">Open in new tab</button>
+      </div>
+    </div>
+
+    <p class="hint">Polaroid layout: overall 4×6 inches; inner photo area is centered with a larger bottom margin for caption. Change DPI for higher print fidelity (300 DPI recommended).</p>
+  </section>
+</main>
+
+<footer>
+  <p>Made with ❤️ — Polaroid 4×6 Postcard Maker</p>
+</footer>
+
+<!-- App logic -->
+<script src="js/postcard.js" defer></script>
+</body>
+</html>

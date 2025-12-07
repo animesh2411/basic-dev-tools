@@ -1,0 +1,169 @@
+/* Base page look (your requested theme) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root{
+  --bg: #f6f8fa;
+  --card-bg: #fff;
+  --muted: #c9d1d9;
+  --text: #24292e;
+  --subtle: #d0d7de;
+  --accent: #0b78ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Inter", system-ui, -apple-system, Roboto, "Segoe UI", Arial;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* header */
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #24292e;
+  color: #fff;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+header p {
+  color: var(--muted);
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+}
+
+/* main app shell */
+.app-shell {
+  max-width: 1100px;
+  margin: 1.5rem auto;
+  padding: 1.25rem;
+}
+
+/* controls layout */
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.control-block {
+  min-width: 220px;
+  flex: 0 0 220px;
+}
+
+.control-row {
+  display: flex;
+  gap: 12px;
+  flex: 1 1 520px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.control-row label,
+.control-block label {
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+}
+
+input[type="file"] { padding:6px 4px; }
+
+input[type="number"], input[type="text"], select {
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid var(--subtle);
+  min-width:120px;
+  font-size:0.95rem;
+}
+
+/* buttons */
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn[disabled], .btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.dark {
+  background: #2c2c2c;
+}
+
+/* preview card (tile-like) */
+.preview {
+  background: var(--card-bg);
+  border: 1px solid var(--subtle);
+  border-radius: 12px;
+  padding: 12px;
+  max-width: 520px;
+  margin-top: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.preview.hidden { display:none; }
+
+.preview-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.small { font-size:0.86rem; color:#555; }
+
+.preview-actions {
+  margin-top:8px;
+  display:flex;
+  gap:8px;
+}
+
+/* canvas should be responsive */
+canvas { display:block; max-width:100%; height:auto; background:transparent; border-radius:8px; }
+
+/* hint and footer */
+.hint {
+  font-size:0.9rem;
+  color:#57606a;
+  margin-top:14px;
+}
+
+/* footer tile-like */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #f1f3f5;
+  color: #555;
+  margin-top: 2rem;
+  border-top: 1px solid #e6e9ee;
+}
+
+/* small responsive tweaks */
+@media (max-width:760px){
+  .control-row { flex-direction: column; align-items: stretch; }
+  .control-block { flex: 1 1 auto; min-width: 0; }
+  .preview { max-width: 100%; }
+}
