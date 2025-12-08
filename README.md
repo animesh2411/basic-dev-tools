@@ -18,7 +18,8 @@ Modular design — new tools can be easily added.
 |----------------------------| ---- |---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | URL Shortener              | 🔗   | Shorten long links using TinyURL API              | Real, shareable short links; input validation                                                                     |
 | Polaroid Maker             | 📸   | Polaroid 4×6 Postcard Maker                       | Create printable 4×6 polaroid-style postcards — DPI control, fit modes, sharpening and captions. Exports JPG/PNG. |
-| Polaroid Camera            | 📸   | Polaroid 4×6 Postcard Camera                      | Create printable 4×6 polaroid-style postcards — DPI control, fit modes, sharpening and captions. Exports JPG/PNG. |
+| Vintage Polaroid Maker     | 📸   | Vintage Polaroid 4×6 Postcard Maker               | Create printable 4×6 vintage-style postcards — DPI control, fit modes, sharpening and captions. Exports JPG/PNG.  |
+| Polaroid Camera            | 📸   | Polaroid 4×6 Postcard Camera                      | Click printable 4×6 polaroid-style postcards                                                                      |
 | Base64 Encoder/Decoder     | 🧮   | Encode/decode text locally                        | Handles invalid Base64 gracefully; clear button                                                                   |
 | QR Code Generator          | 📱   | Encode URLs or text into QR codes instantly       | Download generated QR as PNG                                                                                      |
 | Cron Expression Reader     | ⏱️   | Read and edit cron schedule expressions           | Human-readable output; error validation                                                                           |
@@ -40,6 +41,8 @@ Visit the live demo link above or host on GitHub Pages.
 * Click a tile to open the tool page.
 * URL Shortener: paste a long URL → get a TinyURL link.
 * Polaroid Maker: upload an image → Generate & Exports JPG/PNG.
+* Vintage Polaroid Maker: upload an image → Generate & Exports JPG/PNG.
+* Polaroid Camera: Click an image → Save as image.
 * Base64 tool: encode/decode text.
 * QR Code generator: enter URL/text → generate & download QR.
 * Cron Reader: enter cron expression → read schedule.
