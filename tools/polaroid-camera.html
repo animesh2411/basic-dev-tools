@@ -5,81 +5,110 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Polaroid Camera — Capture & Save</title>
 
-  <!-- styles -->
   <link rel="stylesheet" href="css/polaroid-camera.css">
-
-  <!-- small helper lib for EXIF orientation if you plan to load existing files -->
   <script src="https://cdn.jsdelivr.net/npm/exif-js" defer></script>
   <script src="js/polaroid-camera.js" defer></script>
 </head>
 <body>
-<header>
-  <h1>📸 Polaroid Camera</h1>
-  <p class="muted">Capture a polaroid-style 4×6 photo and save it to your device.</p>
-</header>
+<div class="shell">
+  <!-- VIEWFINDER / CAMERA -->
+  <div class="camera-ui">
+    <video id="video" autoplay playsinline muted></video>
 
-<main class="app-shell">
-  <section class="camera-card">
-    <div class="viewfinder">
-      <video id="video" autoplay playsinline muted></video>
-      <div class="vf-overlay">
-        <div class="vf-top"></div>
-        <div class="vf-center"></div>
-        <div class="vf-bottom">
-          <button id="switchBtn" class="control">🔁</button>
-          <button id="captureBtn" class="shutter">●</button>
-          <button id="saveLastBtn" class="control" title="Save most recent">💾</button>
-        </div>
+    <!-- subtle grid -->
+    <div class="grid-overlay" aria-hidden="true">
+      <div></div><div></div><div></div>
+      <div></div><div></div><div></div>
+      <div></div><div></div><div></div>
+    </div>
+
+    <!-- top controls -->
+    <div class="top-bar">
+      <button id="flashBtn" class="icon-btn" aria-pressed="false" title="Flash">⚡</button>
+      <div class="top-center">Polaroid</div>
+      <div class="top-actions">
+        <button id="ratioBtn" class="icon-btn" title="Aspect">4:6</button>
+        <button id="timerBtn" class="icon-btn" title="Timer">⏱️</button>
       </div>
     </div>
 
-    <div class="controls-row">
-      <label class="small">DPI
-        <input id="dpi" type="number" value="300" min="72" max="1200" step="1" />
-      </label>
+    <!-- middle: focus hint (tap-to-focus simulated) -->
+    <div id="focusRing" class="focus-ring" aria-hidden="true"></div>
 
-      <label class="small">Fit
+    <!-- bottom controls -->
+    <div class="bottom-bar">
+      <div class="left-controls">
+        <button id="galleryThumb" class="thumb-btn" title="Open gallery">
+          <img id="thumbImg" src="" alt="last capture" />
+        </button>
+      </div>
+
+      <div class="shutter-area">
+        <div class="mode-chooser" id="modeChooser">
+          <button class="mode active">PHOTO</button>
+          <button class="mode">PORTRAIT</button>
+          <button class="mode">SQUARE</button>
+        </div>
+
+        <div class="shutter-row">
+          <button id="switchBtn" class="icon-btn small" title="Switch camera">🔁</button>
+          <button id="captureBtn" class="shutter" title="Capture">●</button>
+          <button id="saveLastBtn" class="icon-btn small" title="Save last">⬇️</button>
+        </div>
+      </div>
+
+      <div class="right-controls">
+        <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- hidden controls panel (for options, caption, preview) -->
+  <div class="controls-panel" id="controlsPanel">
+    <div class="controls-row">
+      <label>DPI
+        <input id="dpi" type="number" value="300" min="72" max="1200" step="1"/>
+      </label>
+      <label>Fit
         <select id="fit">
           <option value="cover">Cover</option>
           <option value="contain">Contain</option>
         </select>
       </label>
-
-      <label class="small">Sharpen
+      <label>Sharpen
         <select id="sharpen">
-          <option value="mild">Mild</option>
           <option value="none">None</option>
+          <option value="mild">Mild</option>
           <option value="strong">Strong</option>
         </select>
       </label>
-
       <input id="caption" placeholder="Caption (optional)" />
     </div>
-  </section>
 
-  <section class="preview-card">
-    <div class="preview-header">
-      <strong>Most recent capture</strong>
-      <span id="infoText" class="small"></span>
+    <div class="preview-area">
+      <div class="preview-left">
+        <strong>Most recent</strong>
+        <canvas id="canvas" class="preview-canvas"></canvas>
+      </div>
+      <div class="preview-actions">
+        <a id="downloadLink" class="btn" download="polaroid.jpg">Download</a>
+        <button id="shareBtn" class="btn">Share</button>
+        <button id="openNewTab" class="btn dark">Open</button>
+      </div>
     </div>
 
-    <canvas id="canvas" class="preview-canvas"></canvas>
-
-    <div class="preview-actions">
-      <a id="downloadLink" class="btn" download="polaroid.jpg">Download</a>
-      <button id="shareBtn" class="btn">Share</button>
-      <button id="openNewTab" class="btn dark">Open</button>
+    <div class="gallery-card">
+      <header><strong>Your captures</strong></header>
+      <div id="gallery" class="tile-container"></div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <section class="gallery-card">
-    <header><strong>Your captures</strong></header>
-    <div id="gallery" class="tile-container"></div>
-  </section>
-</main>
-
-<footer>
-  <small>Works best on mobile. Allow camera access. Images saved via download may appear in Gallery/Photos after the OS indexes the file.</small>
-</footer>
+<script>
+    // small helper: tap to open controls panel
+    document.querySelector('.top-center').addEventListener('click', () => {
+      document.getElementById('controlsPanel').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>

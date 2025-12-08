@@ -1,64 +1,36 @@
-// camera.js - mobile-friendly Polaroid camera
-// expects: video#video, canvas#canvas, buttons with ids switchBtn, captureBtn, downloadLink, shareBtn, openNewTab, saveLastBtn
-// and inputs dpi, fit, sharpen, caption
+// camera.js — polished camera UI logic (mobile-first)
+// Requires: elements in index.html (video, buttons, canvas, inputs, gallery container)
+
 (() => {
   const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-
+  const focusRing = document.getElementById('focusRing');
+  const flashBtn = document.getElementById('flashBtn');
+  const ratioBtn = document.getElementById('ratioBtn');
+  const timerBtn = document.getElementById('timerBtn');
   const switchBtn = document.getElementById('switchBtn');
   const captureBtn = document.getElementById('captureBtn');
   const downloadLink = document.getElementById('downloadLink');
   const openNewTab = document.getElementById('openNewTab');
   const shareBtn = document.getElementById('shareBtn');
   const saveLastBtn = document.getElementById('saveLastBtn');
-
+  const galleryThumb = document.getElementById('galleryThumb');
+  const thumbImg = document.getElementById('thumbImg');
   const dpiInput = document.getElementById('dpi');
   const fitSelect = document.getElementById('fit');
   const sharpenSelect = document.getElementById('sharpen');
   const captionInput = document.getElementById('caption');
-  const infoText = document.getElementById('infoText');
+  const infoText = document.getElementById('infoText') || { textContent: '' };
   const galleryEl = document.getElementById('gallery');
+  const canvas = document.getElementById('canvas');
 
   let mediaStream = null;
-  let useFacingMode = 'environment'; // rear by default
+  let useFacingMode = 'environment';
   let lastDataUrl = null;
-  const LOCAL_KEY = 'polaroid_cam_captures_v1'; // store data URLs (small set)
+  const LOCAL_KEY = 'polaroid_cam_captures_v1';
+  let timerSeconds = 0;
 
-  // helpers
-  function supports(constraint) {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaStreamTrack);
-  }
-
-  async function startCamera() {
-    if (!supports()) {
-      alert('getUserMedia not supported in this browser.');
-      return;
-    }
-    if (mediaStream) {
-      // stop previous tracks
-      mediaStream.getTracks().forEach(t => t.stop());
-      mediaStream = null;
-    }
-    const constraints = {
-      video: {
-        facingMode: useFacingMode,
-        width: { ideal: 1920 },
-        height: { ideal: 1080 }
-      },
-      audio: false
-    };
-    try {
-      mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-      video.srcObject = mediaStream;
-      await video.play();
-    } catch (err) {
-      console.error('camera error', err);
-      alert('Camera access denied or unavailable.');
-    }
-  }
-
-  // Compose polaroid: given an ImageBitmap (or canvas), return canvas final sized to 4"x6" at dpi
+  /* UTILITIES (kept compact) */
+  const supports = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   function computePolaroidFrame(widthIn = 4, heightIn = 6, dpi = 300) {
     const totalW = Math.round(widthIn * dpi);
     const totalH = Math.round(heightIn * dpi);
@@ -71,7 +43,28 @@
     return { totalW, totalH, marginLeft, marginRight, marginTop, marginBottom, photoW, photoH };
   }
 
-  // progressive downscale copied (keeps quality)
+  async function startCamera() {
+    if (!supports()) { alert('Camera not supported'); return; }
+    if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+    const constraints = { video: { facingMode: useFacingMode, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false };
+    try {
+      mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = mediaStream;
+      await video.play();
+    } catch (err) {
+      console.error(err); alert('Camera access denied or unavailable.');
+    }
+  }
+
+  function captureFromVideo() {
+    const vW = video.videoWidth, vH = video.videoHeight;
+    const c = document.createElement('canvas');
+    c.width = vW; c.height = vH;
+    c.getContext('2d').drawImage(video, 0, 0, vW, vH);
+    return c;
+  }
+
+  // progressive downscale (same as before)
   function progressiveDownscale(sourceCanvas, targetW, targetH) {
     let current = sourceCanvas;
     if (current.width < targetW || current.height < targetH) {
@@ -99,7 +92,6 @@
     return final;
   }
 
-  // simple sharpen (light)
   function applyUnsharpMask(canvasEl, strength = 'mild') {
     const ctx = canvasEl.getContext('2d');
     const w = canvasEl.width, h = canvasEl.height;
@@ -118,7 +110,6 @@
     t2ctx.imageSmoothingEnabled = true; t2ctx.imageSmoothingQuality = 'high';
     t2ctx.drawImage(tmp, 0, 0, tmp.width, tmp.height, 0, 0, w, h);
     const blurData = t2ctx.getImageData(0, 0, w, h).data;
-
     for (let i = 0; i < data.length; i += 4) {
       for (let c = 0; c < 3; c++) {
         const orig = data[i + c];
@@ -131,25 +122,11 @@
     ctx.putImageData(imageData, 0, 0);
   }
 
-  // capture frame from video -> return a canvas with raw capture
-  function captureFromVideo() {
-    const vW = video.videoWidth;
-    const vH = video.videoHeight;
-    const c = document.createElement('canvas');
-    // keep same aspect ratio as video
-    c.width = vW; c.height = vH;
-    const cctx = c.getContext('2d');
-    cctx.drawImage(video, 0, 0, vW, vH);
-    return c;
-  }
-
-  // Compose final polaroid canvas and return blob (or dataURL)
   async function composePolaroid(sourceCanvas) {
     const dpi = Math.max(72, Math.min(1200, Number(dpiInput.value) || 300));
     const frame = computePolaroidFrame(4, 6, dpi);
     const photoW = frame.photoW, photoH = frame.photoH;
 
-    // crop/fit logic (cover vs contain)
     const srcW = sourceCanvas.width, srcH = sourceCanvas.height;
     const srcAspect = srcW / srcH;
     const targetAspect = photoW / photoH;
@@ -163,194 +140,176 @@
         sH = Math.round(srcW / targetAspect);
         sy = Math.round((srcH - sH) / 2);
       }
-    } // contain leaves the whole image (will letterbox)
+    }
 
-    // create crop canvas at full res
     const crop = document.createElement('canvas');
     crop.width = sW; crop.height = sH;
-    const cctx = crop.getContext('2d');
-    cctx.drawImage(sourceCanvas, sx, sy, sW, sH, 0, 0, sW, sH);
+    crop.getContext('2d').drawImage(sourceCanvas, sx, sy, sW, sH, 0, 0, sW, sH);
 
-    // downscale/upscale to photo area
     const photoCanvas = progressiveDownscale(crop, photoW, photoH);
 
-    // sharpen if requested
-    const sharpen = sharpenSelect.value;
-    if (sharpen !== 'none') applyUnsharpMask(photoCanvas, sharpen);
+    if (sharpenSelect.value !== 'none') applyUnsharpMask(photoCanvas, sharpenSelect.value);
 
-    // final canvas (4x6 at dpi)
     const final = document.createElement('canvas');
     final.width = frame.totalW; final.height = frame.totalH;
     const fctx = final.getContext('2d');
 
-    // background
     fctx.fillStyle = '#fff'; fctx.fillRect(0, 0, final.width, final.height);
-
-    // draw photo
     fctx.drawImage(photoCanvas, frame.marginLeft, frame.marginTop, frame.photoW, frame.photoH);
-
-    // thin border
-    fctx.strokeStyle = '#ededed'; fctx.lineWidth = Math.max(1, Math.round(dpi * 0.003));
+    fctx.strokeStyle = '#ededed'; fctx.lineWidth = Math.max(1, Math.round(frame.totalW * 0.003));
     fctx.strokeRect(frame.marginLeft - 1, frame.marginTop - 1, frame.photoW + 2, frame.photoH + 2);
 
-    // caption
     const caption = (captionInput.value || '').trim();
     if (caption) {
       fctx.fillStyle = '#222';
-      const fontSize = Math.round(dpi * 0.06);
+      const fontSize = Math.round(frame.totalW * 0.06 / 4); // scaled for canvas width
       fctx.font = `${fontSize}px sans-serif`;
       fctx.textAlign = 'center';
       const captionY = Math.round(frame.marginTop + frame.photoH + frame.marginBottom * 0.55);
       fctx.fillText(caption, final.width / 2, captionY);
     }
 
-    // return blob
     return new Promise((res) => {
-      final.toBlob((blob) => {
-        res({ blob, canvas: final });
-      }, 'image/jpeg', 0.95);
+      final.toBlob((blob) => res({ blob, canvas: final }), 'image/jpeg', 0.95);
     });
   }
 
-  // Save blob to local download link (user action) and add to local gallery
   async function savePolaroid(blob, canvasEl) {
-    // create object URL and set as download link
     const url = URL.createObjectURL(blob);
     downloadLink.href = url;
     const filename = `polaroid_${Date.now()}.jpg`;
     downloadLink.download = filename;
+    openNewTab.onclick = () => window.open(url, '_blank');
 
-    // open popup for direct view
-    openNewTab.onclick = () => { window.open(url, '_blank'); };
-
-    // store data URL for in-app gallery (read blob to dataURL)
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataUrl = e.target.result;
-      // store in localStorage (keep only last 20)
       const arr = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]');
       arr.unshift({ id: Date.now(), dataUrl, filename });
-      while (arr.length > 20) arr.pop();
+      while (arr.length > 30) arr.pop();
       localStorage.setItem(LOCAL_KEY, JSON.stringify(arr));
       renderGallery();
       lastDataUrl = dataUrl;
       updatePreviewCanvas(canvasEl);
-      // revoke URL after some time
       setTimeout(() => URL.revokeObjectURL(url), 30000);
     };
     reader.readAsDataURL(blob);
   }
 
   function updatePreviewCanvas(finalCanvas) {
-    // show a downscaled preview (responsive)
     const maxW = 900;
-    let scale = 1;
-    if (finalCanvas.width > maxW) scale = maxW / finalCanvas.width;
-    canvas.width = Math.round(finalCanvas.width * scale);
-    canvas.height = Math.round(finalCanvas.height * scale);
-    const cctx = canvas.getContext('2d');
-    cctx.clearRect(0, 0, canvas.width, canvas.height);
-    cctx.drawImage(finalCanvas, 0, 0, canvas.width, canvas.height);
-    infoText.textContent = `${finalCanvas.width}×${finalCanvas.height}px • ${dpiInput.value} DPI`;
+    let scale = 1; if (finalCanvas.width > maxW) scale = maxW / finalCanvas.width;
+    canvas.width = Math.round(finalCanvas.width * scale); canvas.height = Math.round(finalCanvas.height * scale);
+    const cctx = canvas.getContext('2d'); cctx.clearRect(0, 0, canvas.width, canvas.height); cctx.drawImage(finalCanvas, 0, 0, canvas.width, canvas.height);
+    // set thumbnail
+    try {
+      thumbImg.src = lastDataUrl || canvas.toDataURL('image/jpeg', 0.8);
+    } catch (e) { /* ignore */ }
   }
 
-  // load gallery from localStorage
   function renderGallery() {
     const arr = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]');
     galleryEl.innerHTML = '';
-    if (!arr.length) {
-      galleryEl.innerHTML = '<div class="small muted">No captures yet</div>';
-      return;
-    }
+    if (!arr.length) { galleryEl.innerHTML = '<div class="small muted">No captures yet</div>'; return; }
     arr.forEach(item => {
-      const tile = document.createElement('div');
-      tile.className = 'tile';
-      const img = document.createElement('img');
-      img.src = item.dataUrl;
-      img.alt = 'capture';
-      const lbl = document.createElement('small');
-      const d = new Date(item.id);
-      lbl.textContent = d.toLocaleString();
-      tile.appendChild(img);
-      tile.appendChild(lbl);
+      const tile = document.createElement('div'); tile.className = 'tile';
+      const img = document.createElement('img'); img.src = item.dataUrl; img.alt = 'capture';
+      const lbl = document.createElement('small'); lbl.textContent = new Date(item.id).toLocaleString();
+      tile.append(img, lbl);
       tile.onclick = () => {
-        // open full-size in new tab
         const w = window.open('', '_blank');
-        const html = `<title>Polaroid</title><img src="${item.dataUrl}" style="max-width:100%;height:auto">`;
-        w.document.write(html);
+        w.document.write(`<title>Polaroid</title><img src="${item.dataUrl}" style="max-width:100%;height:auto">`);
         w.document.close();
       };
       galleryEl.appendChild(tile);
     });
   }
 
-  // attempt to share using Web Share API (mobile)
   async function tryShare(blob) {
     if (navigator.canShare && navigator.canShare({ files: [new File([blob], 'polaroid.jpg', { type: blob.type })] })) {
-      try {
-        await navigator.share({
-          files: [new File([blob], 'polaroid.jpg', { type: blob.type })],
-          title: 'Polaroid capture',
-        });
-        return true;
-      } catch (e) {
-        console.warn('share failed', e);
-        return false;
-      }
+      try { await navigator.share({ files: [new File([blob], 'polaroid.jpg', { type: blob.type })], title: 'Polaroid capture' }); return true; } catch (e) { return false; }
     } else if (navigator.share) {
-      // fallback: share a URL (not ideal). Convert to dataURL may be large.
       try {
-        const dataUrl = await new Promise(res => {
-          const r = new FileReader();
-          r.onload = () => res(r.result);
-          r.readAsDataURL(blob);
-        });
-        await navigator.share({ title: 'Polaroid', text: 'Polaroid capture', url: dataUrl });
-        return true;
-      } catch (e) {
-        return false;
-      }
+        const dataUrl = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(blob); });
+        await navigator.share({ title: 'Polaroid', text: 'Polaroid capture', url: dataUrl }); return true;
+      } catch (e) { return false; }
     }
     return false;
   }
 
-  // INIT
+  /* UI helpers */
+  function flashToggle() {
+    const pressed = flashBtn.getAttribute('aria-pressed') === 'true';
+    flashBtn.setAttribute('aria-pressed', String(!pressed));
+    flashBtn.textContent = !pressed ? '⚡️' : '⚡';
+  }
+
+  function showFocus(x, y) {
+    if (!focusRing) return;
+    focusRing.style.left = `${x - 40}px`;
+    focusRing.style.top = `${y - 40}px`;
+    focusRing.style.opacity = '1';
+    focusRing.style.transform = 'scale(1)';
+    setTimeout(() => { focusRing.style.opacity = '0'; focusRing.style.transform = 'scale(0.6)'; }, 900);
+  }
+
+  /* wiring */
   async function init() {
     renderGallery();
     await startCamera();
 
-    // wire buttons
+    // tap-to-focus (visual only)
+    video.addEventListener('click', (ev) => {
+      const r = video.getBoundingClientRect();
+      const x = ev.clientX - r.left; const y = ev.clientY - r.top; showFocus(x, y);
+    });
+
+    flashBtn.onclick = () => flashToggle();
+    ratioBtn.onclick = () => {
+      ratioBtn.textContent = ratioBtn.textContent === '4:6' ? '1:1' : '4:6';
+      // changing ratio only toggles UI label — capture uses polaroid 4x6 always (adjust if you want)
+    };
+    timerBtn.onclick = () => {
+      timerSeconds = timerSeconds === 0 ? 3 : 0;
+      timerBtn.textContent = timerSeconds === 0 ? '⏱️' : `⏱️ ${timerSeconds}s`;
+    };
+
     switchBtn.onclick = async () => {
-      useFacingMode = (useFacingMode === 'environment') ? 'user' : 'environment';
+      useFacingMode = useFacingMode === 'environment' ? 'user' : 'environment';
       await startCamera();
     };
 
-    captureBtn.onclick = async () => {
-      // capture raw frame
+    captureBtn.onclick = async (ev) => {
+      // allow timer
+      if (timerSeconds > 0) {
+        captureBtn.disabled = true;
+        let t = timerSeconds;
+        captureBtn.querySelector('.inner')?.classList.add('counting');
+        const interval = setInterval(() => {
+          captureBtn.querySelector('.inner').textContent = t; t--; if (t < 0) { clearInterval(interval); captureBtn.querySelector('.inner').textContent = ''; captureBtn.disabled = false; } }, 1000);
+        await new Promise(res => setTimeout(res, timerSeconds * 1000));
+      }
+      // capture
       const raw = captureFromVideo();
-      // compose polaroid (blob + canvas)
       const { blob, canvas: finalCanvas } = await composePolaroid(raw);
-      // update preview and save to local gallery
       await savePolaroid(blob, finalCanvas);
-      // optionally auto-download: trigger click on download link to prompt save
-      // NOTE: auto-click is allowed only when triggered by user gesture (captureBtn click qualifies)
+      // trigger download (user gesture)
       downloadLink.click();
     };
 
+    galleryThumb.onclick = () => {
+      document.getElementById('controlsPanel').classList.toggle('open');
+    };
+
     shareBtn.onclick = async () => {
-      // share the most recent from localStorage if present
       const arr = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]');
       if (!arr.length) { alert('No captures yet'); return; }
-      const first = arr[0];
-      // convert dataURL to blob
-      const res = await fetch(first.dataUrl);
-      const blob = await res.blob();
+      const blob = await (await fetch(arr[0].dataUrl)).blob();
       const ok = await tryShare(blob);
       if (!ok) alert('Share not supported or failed on this device.');
     };
 
     saveLastBtn.onclick = () => {
-      // trigger download for last captured (if available)
       if (downloadLink.href) downloadLink.click();
       else alert('No capture ready to save yet.');
     };
@@ -360,27 +319,15 @@
       else alert('No capture to open yet.');
     };
 
-    // also render preview if user edits caption / options
-    [dpiInput, fitSelect, sharpenSelect, captionInput].forEach(el => {
-      el.addEventListener('change', () => {
-        // no auto re-compose from camera; users must capture again to get new settings
-      });
-    });
-
-    // try to enable torch (if supported)
-    try {
-      const [track] = (await navigator.mediaDevices.getUserMedia({ video: { facingMode: useFacingMode } })).getVideoTracks();
-      const capabilities = track.getCapabilities ? track.getCapabilities() : {};
-      if (capabilities.torch) {
-        // optional: add UI and implement if needed
+    // live thumbnail update (on load)
+    setInterval(() => {
+      const arr = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]');
+      if (arr.length && (!thumbImg.src || thumbImg.src === '')) {
+        thumbImg.src = arr[0].dataUrl;
       }
-      track.stop();
-    } catch (e) {
-      // ignore
-    }
+    }, 1000);
   }
 
-  // run
   init();
 
 })();
