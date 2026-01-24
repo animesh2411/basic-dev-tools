@@ -27,6 +27,7 @@ Modular design — new tools can be easily added.
 | Favicon / OG Image Fetcher | 🌐   | Fetch favicon, OG image, and page title from URL  | Fully client-side; preview website metadata                                                                       |
 | Text Diff Tool             | 🔍   | Compare two text blocks → highlight differences   | Side-by-side input and output; inline char-level diff; mobile-friendly                                            |
 | Image Resizer              | 📏   | Resize images by width/height or target file size | Fully client-side; preview & download; supports MB/px input                                                       |
+| Expense Tracker            | 💰   | Track daily income and expenses (INR)             | Local storage persistence; calculates totals; visual indicators                                                   |
 
 ---
 
@@ -50,6 +51,7 @@ Visit the live demo link above or host on GitHub Pages.
 * Favicon / OG Image Fetcher: enter website URL → fetch favicon, OG image, title.
 * Text Diff Tool: paste original and modified text → highlight differences side-by-side.
 * Image Resizer: upload an image → resize by width/height **OR** target size in MB → preview & download resized image.
+* Expense Tracker: add income/expenses → view total balance in INR (auto-saves).
 
 ---
 
