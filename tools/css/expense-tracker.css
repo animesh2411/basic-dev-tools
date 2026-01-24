@@ -1,0 +1,112 @@
+.balance-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.balance-box {
+    flex: 1;
+}
+
+.balance-box h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.balance-box p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0.5rem 0 0;
+}
+
+.money.plus {
+    color: #2da44e;
+}
+
+.money.minus {
+    color: #cf222e;
+}
+
+.transaction-form {
+    text-align: left;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #d0d7de;
+}
+
+.form-control {
+    margin-bottom: 1rem;
+}
+
+.form-control label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-control input {
+    width: 90%;
+    /* Match style.css input width roughly */
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.list li {
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border-right: 5px solid #2da44e;
+    /* Default to income style or neutral */
+}
+
+.list li.minus {
+    border-right-color: #cf222e;
+}
+
+.delete-btn {
+    cursor: pointer;
+    background-color: #cf222e;
+    border: 0;
+    color: #fff;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 2px 5px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-100%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.list li:hover .delete-btn {
+    opacity: 1;
+}
+
+/* Checkbox/Radios for transaction type */
+.type-control {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 500px) {
+    .form-control input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
