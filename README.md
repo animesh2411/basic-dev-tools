@@ -28,6 +28,12 @@ Modular design — new tools can be easily added.
 | Text Diff Tool             | 🔍   | Compare two text blocks → highlight differences   | Side-by-side input and output; inline char-level diff; mobile-friendly                                            |
 | Image Resizer              | 📏   | Resize images by width/height or target file size | Fully client-side; preview & download; supports MB/px input                                                       |
 | Expense Tracker            | 💰   | Track daily income and expenses (INR)             | Local storage persistence; calculates totals; visual indicators                                                   |
+| Shubh Invite               | 🎉   | Invitation Builder                                | External tool; choose a template, personalize text/colors, and download invitations                             |
+| PhotoBridge                | 📸   | Browse and download photos/videos from any device browser over the same Wi‑Fi network | External app; no cloud required                                                             |
+| Salary Department          | 💼   | Salary-related financial tools                   | External Streamlit app for salary planning and calculations                                                       |
+| AI Canvas                  | 🖼️   | Open-source image generator builder               | External app; generate images without backend or API keys                                                       |
+| World Stats Dashboard      | 📊   | Population, literacy, religion, and GDP trends   | External visual dashboard using Kaggle datasets                                                                |
+| Snaps Camera               | 📸   | Mobile-first Polaroid camera app                 | External app; capture photos and generate 4×6 polaroid-style prints                                            |
 
 ---
 
