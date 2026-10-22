@@ -99,7 +99,6 @@ Visit the live demo link above or host on GitHub Pages.
 
 ## 📜 License
 
-MIT License © 2025 Basic Dev Tools
+MIT License © 2026 Basic Dev Tools
 Made with ❤️ by Animesh
 
----

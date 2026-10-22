@@ -96,7 +96,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
     // Draw footer
     qrCtx.font = "32px Inter, sans-serif";
-    qrCtx.fillText("Made with ❤️ by Animesh & © 2025 Basic Dev Tools", qrCanvas.width / 2, qrCanvas.height - 60);
+    qrCtx.fillText("Made with ❤️ by Animesh & © 2026 Basic Dev Tools", qrCanvas.width / 2, qrCanvas.height - 60);
   };
 
   // HTML preview below canvas
