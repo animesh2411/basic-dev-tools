@@ -92,7 +92,7 @@ generateBtn.addEventListener("click", async () => {
 
       ctx.fillStyle = "#24292e";
       ctx.font = "32px Inter, sans-serif";
-      ctx.fillText("Made with ❤️ by Animesh & © 2026 Basic Dev Tools", canvas.width / 2, canvas.height - 60);
+      ctx.fillText("Made with ❤️ by Animesh & © 2025 Basic Dev Tools", canvas.width / 2, canvas.height - 60);
     };
 
     downloadBtn.disabled = false;
